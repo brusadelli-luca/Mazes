@@ -1,17 +1,15 @@
 #Amazing Mazes
 # Classes
 
-import random
-
 class Maze:
     def __init__(self,N):
         self.N = N
 
         self.cells = []
-        for I in range(N):
+        for row in range(N):
             self.cells.append([])
-            for J in range(N):
-                self.cells[I].append(Cell(I,J))
+            for col in range(N):
+                self.cells[row].append(Cell(row,col))
     
         self.cells[0][0].walls['W'] = False
         self.cells[N-1][N-1].walls['E'] = False
@@ -21,30 +19,30 @@ class Maze:
         
         maze_out = ''
 
-        for I in range(self.N):
+        for row in range(self.N):
             
-            maze_out_W = ''
-            maze_out_C = ''
+            walls_line = ''
+            cells_line = ''
 
-            for J in range(self.N):
+            for col in range(self.N):
 
-                maze_out_W = maze_out_W + '#' + wall[self.cells[I][J].walls['N']]
-                maze_out_C = maze_out_C + wall[self.cells[I][J].walls['W']] + self.cells[I][J].symbol
+                walls_line = walls_line + '#' + wall[self.cells[row][col].walls['N']]
+                cells_line = cells_line + wall[self.cells[row][col].walls['W']] + self.cells[row][col].symbol
             
-            maze_out_W = maze_out_W + "#"
-            maze_out_C = maze_out_C + wall[self.cells[I][J].walls['E']]
-            maze_out = maze_out + '\n' + maze_out_W + '\n' + maze_out_C
+            walls_line = walls_line + "#"
+            cells_line = cells_line + wall[self.cells[row][col].walls['E']]
+            maze_out = maze_out + '\n' + walls_line + '\n' + cells_line
 
-        maze_out_W = ''
-        for J in range(self.N):
-            maze_out_W = maze_out_W + '#' + wall[self.cells[I][J].walls['S']]
-        maze_out_W = maze_out_W + "#"
+        walls_line = ''
+        for col in range(self.N):
+            walls_line = walls_line + '#' + wall[self.cells[row][col].walls['S']]
+        walls_line = walls_line + "#"
         
-        maze_out = maze_out + '\n' + maze_out_W            
+        maze_out = maze_out + '\n' + walls_line            
 
         return maze_out
 
-    def Write(self,file_name):
+    def write(self,file_name):
         fichier = open(file_name + '.txt',"w")
         fichier.write(str(self))
 
@@ -75,23 +73,12 @@ class Cell:
         self.symbol = '.'
         self.visited = False
 
-    def __str__(self):
-        wall = {True:'#', False:'.'}
-        
-        return ' ' + wall[self.walls['N']] + '\n' + wall[self.walls['W']] + self.symbol + wall[self.walls['E']] + '\n' + ' ' + wall[self.walls['S']]
-    
-    def ID(self):
+    def cell_coords(self):
         return [self.X, self.Y]
 
-    def Visit(self):
+    def visit(self):
         self.visited = True
 
-    def walls_up(self):
-        if False not in self.walls.values():
-            return True
-        else:
-            return False
+    def break_wall(self,direction):
 
-    def break_wall(self,dir):
-
-        self.walls[dir] = False
+        self.walls[direction] = False
