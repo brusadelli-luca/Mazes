@@ -1,6 +1,6 @@
 #Amazing Mazes
 # Recursive Backtrack
-from maze_classes import *
+import random
 
 def build_recursive(maze):
     prev_wall = {
@@ -12,15 +12,15 @@ def build_recursive(maze):
 
     path = []
     cell = maze.cells[0][0]
-    path.append(cell.ID())
-    cell.Visit()
+    path.append(cell.cell_coords())
+    cell.visit()
 
     cells_nb = maze.N * maze.N
 
     while len(path) < cells_nb:
         prev_X = cell.X
         prev_Y = cell.Y
-        cell = next(maze,cell)
+        cell = next_cell(maze,cell)
         
         if cell == 'END':
             i = -1
@@ -29,47 +29,47 @@ def build_recursive(maze):
             
             prev_X = path[i][0]
             prev_Y = path[i][1]
-            cell = next(maze,maze.cells[path[i][0]][path[i][1]])
+            cell = next_cell(maze,maze.cells[path[i][0]][path[i][1]])
         
         if cell.X == prev_X:
             if cell.Y > prev_Y:
-                dir = 'W'
+                direction = 'W'
             else:
-                dir = 'E'
+                direction = 'E'
 
         elif cell.Y == prev_Y:
             if cell.X > prev_X:
-                dir = 'N'
+                direction = 'N'
             else:
-                dir = 'S'
+                direction = 'S'
 
-        path.append(cell.ID())
-        cell.Visit()
-        cell.break_wall(dir)
-        maze.cells[prev_X][prev_Y].break_wall(prev_wall[dir])
+        path.append(cell.cell_coords())
+        cell.visit()
+        cell.break_wall(direction)
+        maze.cells[prev_X][prev_Y].break_wall(prev_wall[direction])
     
     return maze
 
-def next(maze,cell):
+def next_cell(maze,cell):
 
     next_list = maze.available_dir(cell)
     if next_list != []:
-        dir = random.choice(next_list)
+        direction = random.choice(next_list)
 
-        if dir == 'N' and cell.X > 0:
+        if direction == 'N' and cell.X > 0:
             return maze.cells[cell.X-1][cell.Y]
 
-        elif dir == 'E' and cell.Y < maze.N - 1:
+        elif direction == 'E' and cell.Y < maze.N - 1:
             return maze.cells[cell.X][cell.Y+1]
 
-        elif dir == 'S' and cell.X < maze.N - 1:
+        elif direction == 'S' and cell.X < maze.N - 1:
             return maze.cells[cell.X+1][cell.Y]
 
-        elif dir == 'W' and cell.Y > 0:
+        elif direction == 'W' and cell.Y > 0:
             return maze.cells[cell.X][cell.Y-1]
 
         else:
-            return next(maze,cell)
+            return next_cell(maze,cell)
 
     else:
         return 'END'
