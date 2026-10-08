@@ -35,18 +35,7 @@ def shorter_path(maze, start_nod, end_nod):
     while open_list != []:
         
         # Priorise la liste par HEURISTIC
-        # if len(open_list):
-        #     print('liste avant')
-        #     for nd in open_list:
-        #         print(nd.X,nd.Y,nd.cost,nd.dist,nd.heuristic)
-
         open_list = sorted(open_list, key=lambda node: node.heuristic)
-        
-        # if len(open_list):
-        #     print('liste apres')
-        #     for nd in open_list:
-        #         print(nd.X,nd.Y,nd.cost,nd.dist,nd.heuristic)
-        #     print(maze)
         
         # Prend le premier noeud de la liste triée (le plus prometteur) et le retire de OPEN
         u = open_list.pop(0)

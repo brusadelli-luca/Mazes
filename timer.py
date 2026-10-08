@@ -11,5 +11,5 @@ for size in sizes:
     maze1 = build_recursive(Maze(size))
     durations.append(round(time.time()-start,2))
 
-    fichier = open('temps' + '.txt',"w")
-    fichier.write(str(sizes) + '\n' + str(durations))
+    with open('temps.txt', "w") as fichier:
+        fichier.write(str(sizes) + '\n' + str(durations))
